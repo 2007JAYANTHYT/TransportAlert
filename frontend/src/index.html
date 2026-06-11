@@ -71,7 +71,6 @@
         <!-- Custom Error Toast -->
         <div id="error-toast" class="toast hidden"></div>
         
-        <!-- Navbar -->
         <nav class="navbar">
             <h2 id="nav-title">TransportAlert</h2>
         </nav>
@@ -90,8 +89,8 @@
                             <div class="input-group text-left">
                                 <label>Mobile Number</label>
                                 <div style="display: flex; gap: 10px;">
-                                    <input type="text" value="+91" readonly style="width: 70px; font-size: 1.2rem; text-align: center; padding: 0.9rem 0; font-weight: bold; border-radius: 12px; color: var(--text-main);">
-                                    <input type="tel" id="phone-number" placeholder="98765 43210" style="font-size: 1.2rem; letter-spacing: 2px; flex: 1;" maxlength="12">
+                                    <input type="text" value="+91" readonly style="width: 70px; font-size: 1.2rem; background: rgba(255,255,255,0.03); text-align: center; padding: 0.9rem 0; font-weight: bold; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); color: var(--text-sub);">
+                                    <input type="tel" id="phone-number" placeholder="98765 43210" style="font-size: 1.2rem; letter-spacing: 2px; flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);" maxlength="12">
                                 </div>
                             </div>
                             <button id="send-otp-btn" class="btn-primary w-100" onclick="app.sendOTP()">Send OTP</button>

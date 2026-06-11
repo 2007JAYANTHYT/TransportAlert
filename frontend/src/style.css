@@ -1,12 +1,10 @@
 :root {
-    --bg-color: #09090b;
-    --primary-color: #3b82f6;
-    --primary-hover: #2563eb;
-    --secondary-color: #18181b;
-    --text-main: #ffffff;
-    --text-sub: #a1a1aa;
-    --glass-bg: rgba(24, 24, 27, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.08);
+    --bg-color: #000000;
+    --primary-color: #ededed;
+    --primary-hover: #ffffff;
+    --secondary-color: #111111;
+    --text-main: #ededed;
+    --text-sub: #888888;
     --danger: #ef4444;
     --warning: #f59e0b;
     --success: #10b981;
@@ -20,8 +18,8 @@
 }
 
 body {
-    font-family: 'Outfit', sans-serif;
-    background-color: #0a0a0a; /* Darker background for desktop */
+    font-family: 'Inter', 'Outfit', sans-serif;
+    background-color: var(--bg-color);
     color: var(--text-main);
     overflow: hidden; /* Hide desktop scrolling */
     height: 100vh;
@@ -103,10 +101,9 @@ body {
     position: relative;
     margin: 0 auto 2rem;
     overflow: hidden;
-    border-radius: 24px;
-    background: linear-gradient(to bottom, #1e293b 50%, #09090b 50%);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.1);
-    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    background: #0a0a0a;
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .sky {
@@ -193,9 +190,9 @@ body {
 
 .navbar h2 {
     font-weight: 800;
-    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    color: var(--text-main);
 }
 
 .content {
@@ -229,22 +226,17 @@ body {
     margin-bottom: 1.5rem;
 }
 
-/* Glassmorphism Classes */
+/* Minimalist Cards */
 .glass-card, .glass-form {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 24px;
+    background: #0a0a0a;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
     padding: 1.5rem;
     margin-bottom: 1.25rem;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .glass-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
@@ -260,50 +252,50 @@ body {
 
 /* Buttons */
 button {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Inter', 'Outfit', sans-serif;
     cursor: pointer;
-    border: none;
+    border: 1px solid rgba(255,255,255,0.08);
     border-radius: 8px;
-    font-weight: 600;
+    font-weight: 500;
     transition: all 0.2s;
 }
 
 .btn-primary {
     background: var(--primary-color);
-    color: white;
+    color: #000;
     padding: 0.6rem 1.2rem;
+    border: none;
 }
-.btn-primary:hover { background: var(--primary-hover); }
-.btn-primary:active { transform: scale(0.95); }
+.btn-primary:hover { background: var(--primary-hover); transform: scale(1.02); }
+.btn-primary:active { transform: scale(0.98); }
 
 .btn-secondary {
-    background: var(--secondary-color);
+    background: #0a0a0a;
     color: var(--text-main);
     padding: 0.6rem 1.2rem;
-    border: 1px solid var(--glass-border);
 }
-.btn-secondary:hover { background: #334155; }
-.btn-back { background: transparent; color: var(--primary-color); font-size: 1rem; padding: 0.5rem; }
+.btn-secondary:hover { background: #111; border-color: rgba(255,255,255,0.2); }
+.btn-back { background: transparent; color: var(--text-sub); border: none; font-size: 1rem; padding: 0.5rem; }
+.btn-back:hover { color: var(--text-main); }
 
 /* Forms */
 .input-group { margin-bottom: 1.25rem; }
-.input-group label { display: block; margin-bottom: 0.5rem; color: var(--text-sub); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;}
+.input-group label { display: block; margin-bottom: 0.5rem; color: var(--text-sub); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 500;}
 .input-group input, .input-group select, .input-group textarea {
     width: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: #0a0a0a;
+    border: 1px solid rgba(255,255,255,0.08);
     color: var(--text-main);
     padding: 0.9rem;
-    border-radius: 12px;
+    border-radius: 8px;
     font-family: inherit;
     font-size: 1rem;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
     outline: none;
-    border-color: var(--primary-color);
-    background: rgba(0, 0, 0, 0.6);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    border-color: rgba(255,255,255,0.3);
+    background: #111;
 }
 
 /* Issues List */
@@ -341,21 +333,18 @@ button {
 .route-item { display: flex; justify-content: space-between; margin-top: 0.5rem; padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 8px;}
 .status-green { color: var(--success); font-weight: 600;}
 
-/* Bottom Navigation (Floating Dock) */
+/* Bottom Navigation */
 .bottom-nav {
     position: absolute;
-    bottom: 20px; 
-    left: 5%; 
-    width: 90%;
-    background: rgba(24, 24, 27, 0.85);
-    backdrop-filter: blur(25px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    bottom: 0; 
+    left: 0; 
+    width: 100%;
+    background: #000000;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     display: flex;
     justify-content: space-around;
     padding: 0.75rem 0.5rem;
     z-index: 100;
-    border-radius: 30px; /* Pill shape */
 }
 .nav-item {
     background: transparent;
@@ -374,17 +363,15 @@ button {
     transition: transform 0.3s ease;
 }
 .nav-item:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: #0a0a0a;
 }
 .nav-item.active { 
     color: var(--text-main); 
-    font-weight: 700; 
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
-    box-shadow: inset 0 0 0 1px rgba(139, 92, 246, 0.3);
+    font-weight: 600; 
+    background: transparent;
 }
 .nav-item.active svg {
-    transform: translateY(-2px) scale(1.1);
-    stroke: var(--primary-color);
+    stroke: var(--text-main);
 }
 
 /* Login Screen & Animated OTP */
@@ -416,11 +403,11 @@ button {
     height: 55px;
     font-size: 1.5rem;
     text-align: center;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: #0a0a0a;
+    border: 1px solid rgba(255,255,255,0.08);
     color: var(--text-main);
     border-radius: 8px;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease;
     -moz-appearance: textfield;
     animation: popInOTP 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
 }
@@ -444,10 +431,8 @@ button {
 }
 .otp-box:focus {
     outline: none;
-    border-color: var(--primary-color);
-    background: rgba(0, 0, 0, 0.6);
-    box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
-    transform: translateY(-2px);
+    border-color: rgba(255,255,255,0.3);
+    background: #111;
 }
 
 /* Verified Animation States */
