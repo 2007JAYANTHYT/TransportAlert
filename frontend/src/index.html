@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TransportAlert</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Loading Animation Screen -->
+    <div id="loading-screen">
+        <div class="loader-content">
+            <h1 class="loader-title">TransportAlert</h1>
+            <div class="animation-container">
+                <div class="sky"></div>
+                <div class="trees">
+                    <div class="tree"></div>
+                    <div class="tree"></div>
+                    <div class="tree"></div>
+                </div>
+                <div class="road">
+                    <div class="road-line"></div>
+                </div>
+                <div class="vehicle"></div>
+                <div class="vehicle reverse"></div>
+            </div>
+            <p>Loading your route...</p>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app" class="hidden">
+        
+        <!-- Navbar -->
+        <nav class="navbar">
+            <h2 id="nav-title">TransportAlert</h2>
+        </nav>
+
+        <!-- Screens -->
+        <main class="content">
+            
+            <!-- Home Screen -->
+            <section id="home-screen" class="screen active">
+                <div class="screen-header">
+                    <h3>Active Issues</h3>
+                    <button class="btn-primary" onclick="app.navigate('report-screen')">+ Report Issue</button>
+                </div>
+                <div class="glass-card summary-card">
+                    <p>Current City Traffic: <strong>Moderate</strong></p>
+                    <p>Issues reported today: <strong id="issue-count">...</strong></p>
+                </div>
+                <div id="issues-list" class="issues-list">
+                    <!-- Issue items injected here -->
+                </div>
+            </section>
+
+            <!-- Report Issue Screen -->
+            <section id="report-screen" class="screen">
+                <div class="screen-header">
+                    <h3>Report an Issue</h3>
+                </div>
+                <form id="report-form" class="glass-form">
+                    <div class="input-group">
+                        <label>Title</label>
+                        <input type="text" id="r-title" placeholder="e.g. Huge Pothole" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Type</label>
+                        <select id="r-type">
+                            <option>Traffic Congestion</option>
+                            <option>Accident</option>
+                            <option>Pothole</option>
+                            <option>Signal Issue</option>
+                            <option>Public Transport Delay</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Description</label>
+                        <textarea id="r-desc" rows="3" placeholder="Describe the situation..." required></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>Severity</label>
+                        <select id="r-severity">
+                            <option>Low</option>
+                            <option selected>Medium</option>
+                            <option>High</option>
+                            <option>Critical</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn-secondary" onclick="app.getLocation()">📍 Share Location</button>
+                    <p id="r-location-text" class="sub-text">Location not added</p>
+                    <input type="hidden" id="r-lat"><input type="hidden" id="r-lng">
+                    <button type="submit" class="btn-primary w-100 mt-2">Submit Report</button>
+                </form>
+            </section>
+
+            <!-- Map Screen -->
+            <section id="map-screen" class="screen">
+                <div class="screen-header">
+                    <h3>Live Map Tracker</h3>
+                </div>
+                <div id="map-container" class="glass-card">
+                    <div id="map"></div>
+                </div>
+            </section>
+
+            <!-- Solutions Screen -->
+            <section id="solutions-screen" class="screen">
+                <div class="screen-header">
+                    <h3>Solutions & Contacts</h3>
+                </div>
+                <div class="glass-card mb-2">
+                    <h4>Emergency Contacts</h4>
+                    <ul class="contact-list">
+                        <li>Police: <strong>100</strong> <a href="tel:100" class="call-btn">📞</a></li>
+                        <li>Ambulance: <strong>108</strong> <a href="tel:108" class="call-btn">📞</a></li>
+                        <li>Traffic Control: <strong>1095</strong> <a href="tel:1095" class="call-btn">📞</a></li>
+                    </ul>
+                </div>
+                <div class="glass-card mb-2">
+                    <h4>Alternative Routes</h4>
+                    <p class="sub-text">AI suggested routes avoiding active issues.</p>
+                    <div class="route-item">
+                        <span>Downtown ➔ Suburbs</span>
+                        <span class="status-green">Clear via Highway 4</span>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <h4>Public Transport Updates</h4>
+                    <p class="sub-text">Metro Line B is delayed by 15 mins due to signal issues.</p>
+                </div>
+            </section>
+
+            <!-- Issue Detail Screen -->
+            <section id="detail-screen" class="screen">
+                <div class="screen-header">
+                    <button class="btn-back" onclick="app.navigate('home-screen')">⬅ Back</button>
+                    <h3>Issue Details</h3>
+                </div>
+                <div id="detail-content" class="glass-card">
+                    <!-- Detail injected here -->
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="app.navigate('home-screen')">🏠<br>Home</button>
+            <button class="nav-item" onclick="app.navigate('map-screen')">🗺️<br>Map</button>
+            <button class="nav-item" onclick="app.navigate('report-screen')">➕<br>Report</button>
+            <button class="nav-item" onclick="app.navigate('solutions-screen')">💡<br>Solutions</button>
+        </nav>
+
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <!-- App JS -->
+    <script src="app.js"></script>
+</body>
+</html>

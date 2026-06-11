@@ -1,0 +1,318 @@
+:root {
+    --bg-color: #0f172a;
+    --primary-color: #3b82f6;
+    --primary-hover: #2563eb;
+    --secondary-color: #1e293b;
+    --text-main: #f8fafc;
+    --text-sub: #94a3b8;
+    --glass-bg: rgba(30, 41, 59, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --success: #10b981;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    overflow-x: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ================= LOADING SCREEN ================= */
+#loading-screen {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease;
+}
+
+.loader-content {
+    text-align: center;
+}
+
+.loader-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: pulse 2s infinite;
+}
+
+.animation-container {
+    width: 200px;
+    height: 150px;
+    position: relative;
+    margin: 0 auto 2rem;
+    overflow: hidden;
+    border-radius: 20px;
+    background: linear-gradient(to bottom, #1e293b 50%, #0f172a 50%);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 1px solid var(--glass-border);
+}
+
+.sky {
+    height: 50%;
+    background: #1e293b;
+}
+
+.road {
+    height: 50%;
+    background: #334155;
+    position: relative;
+}
+
+.road-line {
+    width: 100%;
+    height: 4px;
+    background: repeating-linear-gradient(90deg, transparent, transparent 10px, #facc15 10px, #facc15 20px);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    animation: roadMove 1s linear infinite;
+}
+
+.trees {
+    position: absolute;
+    top: 40px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.tree {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 20px solid #10b981;
+    position: relative;
+    animation: treesMove 2s linear infinite;
+}
+.tree::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: -2px;
+    width: 4px;
+    height: 10px;
+    background: #8b4513;
+}
+
+.vehicle {
+    width: 30px;
+    height: 15px;
+    background: #ef4444;
+    border-radius: 5px 10px 0 0;
+    position: absolute;
+    bottom: 20px;
+    left: -40px;
+    animation: driveCar 3s linear infinite;
+    z-index: 2;
+}
+
+.vehicle::after, .vehicle::before {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    width: 8px;
+    height: 8px;
+    background: #000;
+    border-radius: 50%;
+}
+.vehicle::before { left: 4px; }
+.vehicle::after { right: 4px; }
+
+.vehicle.reverse {
+    background: #3b82f6;
+    bottom: 45px;
+    left: 100%;
+    border-radius: 10px 5px 0 0;
+    animation: driveCarReverse 4s linear infinite;
+}
+
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+@keyframes roadMove { 100% { background-position: -20px 0; } }
+@keyframes treesMove { 0% { transform: translateX(200px); } 100% { transform: translateX(-200px); } }
+@keyframes driveCar { 0% { left: -40px; } 100% { left: 220px; } }
+@keyframes driveCarReverse { 0% { left: 220px; } 100% { left: -40px; } }
+
+/* ================= MAIN APP ================= */
+.navbar {
+    padding: 1rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--glass-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    text-align: center;
+}
+
+.navbar h2 {
+    font-weight: 800;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    padding-bottom: 80px; /* Space for bottom nav */
+}
+
+.screen {
+    display: none;
+    animation: fadeIn 0.3s ease-out;
+}
+.screen.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.screen-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Glassmorphism Classes */
+.glass-card, .glass-form {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Typography & Utilities */
+.sub-text {
+    color: var(--text-sub);
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
+.mb-2 { margin-bottom: 1.5rem; }
+.mt-2 { margin-top: 1rem; }
+.w-100 { width: 100%; }
+
+/* Buttons */
+button {
+    font-family: 'Outfit', sans-serif;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.6rem 1.2rem;
+}
+.btn-primary:hover { background: var(--primary-hover); }
+.btn-primary:active { transform: scale(0.95); }
+
+.btn-secondary {
+    background: var(--secondary-color);
+    color: var(--text-main);
+    padding: 0.6rem 1.2rem;
+    border: 1px solid var(--glass-border);
+}
+.btn-secondary:hover { background: #334155; }
+.btn-back { background: transparent; color: var(--primary-color); font-size: 1rem; padding: 0.5rem; }
+
+/* Forms */
+.input-group { margin-bottom: 1rem; }
+.input-group label { display: block; margin-bottom: 0.5rem; color: var(--text-sub); font-size: 0.9rem;}
+.input-group input, .input-group select, .input-group textarea {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-family: inherit;
+}
+.input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* Issues List */
+.issue-item {
+    cursor: pointer;
+}
+.issue-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+.badge { padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
+.badge.low { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+.badge.medium { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+.badge.high, .badge.critical { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+
+/* Map */
+#map-container { padding: 0; overflow: hidden; height: 400px; }
+#map { height: 100%; width: 100%; border-radius: 16px; z-index: 1; }
+
+/* Solutions Screen */
+.contact-list { list-style: none; }
+.contact-list li { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--glass-border); }
+.contact-list li:last-child { border-bottom: none; }
+.call-btn { text-decoration: none; font-size: 1.2rem; }
+.route-item { display: flex; justify-content: space-between; margin-top: 0.5rem; padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 8px;}
+.status-green { color: var(--success); font-weight: 600;}
+
+/* Bottom Navigation */
+.bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; width: 100%;
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: space-around;
+    padding: 0.5rem 0;
+    padding-bottom: env(safe-area-inset-bottom, 0.5rem);
+    z-index: 100;
+}
+.nav-item {
+    background: transparent;
+    color: var(--text-sub);
+    font-size: 0.75rem;
+    font-weight: 400;
+    padding: 0.5rem;
+}
+.nav-item.active { color: var(--primary-color); font-weight: 600; }
