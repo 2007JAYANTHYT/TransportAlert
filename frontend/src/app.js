@@ -19,6 +19,7 @@ const app = {
     userLng: null,
     notifiedIssues: new Set(),
     isVerifying: false,
+    userMarker: null,
 
     init() {
         // Firebase Auth State Listener
@@ -372,10 +373,8 @@ const app = {
                     let upvotes = 0;
                     let downvotes = 0;
                     if (issue.votes) {
-                        Object.values(issue.votes).forEach(v => {
-                            if (v === 'upvote') upvotes++;
-                            else if (v === 'downvote') downvotes++;
-                        });
+                        if (issue.votes.upvote) upvotes = Object.keys(issue.votes.upvote).length;
+                        if (issue.votes.downvote) downvotes = Object.keys(issue.votes.downvote).length;
                     }
                     // attach computed votes to issue object for the detail view
                     issue.computedUpvotes = upvotes;
@@ -438,7 +437,7 @@ const app = {
 
     async voteIssue(id, type) {
         if (!this.user) {
-            alert("You must be logged in to vote!");
+            this.showError("You must be logged in to vote!");
             return;
         }
 
@@ -448,36 +447,34 @@ const app = {
             if (snapshot.exists()) {
                 const data = snapshot.val();
                 
-                // Secure Voting check
-                if (data.votes && data.votes[this.user.uid]) {
-                    alert("You have already voted on this issue!");
+                // Check if user already voted THIS specific type (upvote or downvote)
+                if (data.votes && data.votes[type] && data.votes[type][this.user.uid]) {
+                    this.showError("You have already voted " + (type === 'upvote' ? '👍 Still There' : '👎 Cleared') + "!");
                     return;
                 }
 
-                // Register vote under user's ID
-                await db.ref(`issues/${id}/votes/${this.user.uid}`).set(type);
+                // Register vote: votes/upvote/{uid} or votes/downvote/{uid}
+                await db.ref(`issues/${id}/votes/${type}/${this.user.uid}`).set(true);
                 
-                // Re-calculate to see if it reached auto-resolve threshold
-                let newDownvotes = (type === 'downvote' ? 1 : 0);
-                if (data.votes) {
-                    Object.values(data.votes).forEach(v => {
-                        if (v === 'downvote') newDownvotes++;
-                    });
+                // Re-calculate downvotes to check auto-resolve threshold
+                let newDownvotes = 0;
+                if (data.votes && data.votes.downvote) {
+                    newDownvotes = Object.keys(data.votes.downvote).length;
                 }
+                if (type === 'downvote') newDownvotes++;
                 
                 // Auto-resolve logic (Waze-style)
                 if (newDownvotes >= 3) {
                     await issueRef.update({ status: 'Resolved' });
-                    alert("This issue has been marked as Cleared by the community and removed from the map!");
+                    this.showError("Issue marked as Cleared by the community!");
                     this.navigate('home-screen');
                 } else {
-                    alert("Vote recorded successfully!");
-                    // The UI will auto-refresh via the real-time 'on(value)' listener!
+                    this.showError("Vote recorded ✅");
                 }
             }
         } catch (e) {
             console.error(e);
-            alert("Error casting vote.");
+            this.showError("Error casting vote.");
         }
     },
 
@@ -523,9 +520,9 @@ const app = {
             attribution: '© OpenStreetMap contributors'
         }).addTo(this.map);
 
-        // Ask for permission and grab live location
+        // Ask for permission and grab live location with continuous tracking
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
+            navigator.geolocation.watchPosition(
                 (position) => {
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
@@ -534,24 +531,28 @@ const app = {
                     this.userLng = lng;
                     this.checkProximityToHazards();
                     
-                    // Center map on user
-                    this.map.setView([lat, lng], 14);
-                    
-                    // Add pulsing amber marker for user's live location
-                    const userIcon = L.divIcon({
-                        html: '<div style="background-color: #f59e0b; width: 16px; height: 16px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 15px rgba(245,158,11,0.9); animation: pulse 1.5s infinite;"></div>',
-                        className: 'custom-marker'
-                    });
-                    
-                    L.marker([lat, lng], {icon: userIcon})
-                        .addTo(this.map)
-                        .bindPopup('<b>📍 You are here</b><br>Live Location')
-                        .openPopup();
+                    if (!this.userMarker) {
+                        // First time: center map and add marker
+                        this.map.setView([lat, lng], 15);
+                        
+                        const userIcon = L.divIcon({
+                            html: '<div style="background-color: #d97706; width: 16px; height: 16px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 15px rgba(217,119,6,0.9); animation: pulse 1.5s infinite;"></div>',
+                            className: 'custom-marker'
+                        });
+                        
+                        this.userMarker = L.marker([lat, lng], {icon: userIcon})
+                            .addTo(this.map)
+                            .bindPopup('<b>📍 You are here</b><br>Live Location')
+                            .openPopup();
+                    } else {
+                        // Update existing marker position
+                        this.userMarker.setLatLng([lat, lng]);
+                    }
                 },
                 (error) => {
                     console.warn("Could not get live location: ", error.message);
                 },
-                { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 5000 }
             );
         }
 
