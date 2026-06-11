@@ -200,6 +200,25 @@
                     </div>
                 </div>
                 <div id="map"></div>
+                <!-- Google Maps Navigation Overlay -->
+                <div id="map-nav-overlay" class="hidden" style="position: absolute; top: 15px; left: 50%; transform: translateX(-50%); z-index: 1000; width: 90%; max-width: 350px;">
+                    <div class="glass-card" style="padding: 0.8rem 1.2rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 0; background: rgba(12, 12, 12, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(217,119,6,0.3); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(217,119,6,0.15);">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="background: rgba(217,119,6,0.1); padding: 8px; border-radius: 50%;">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+                                </svg>
+                            </div>
+                            <div>
+                                <p style="font-weight: 700; font-size: 0.95rem; color: var(--text-main); margin-bottom: 2px;">Reported Hazard</p>
+                                <p style="font-size: 0.75rem; color: var(--text-sub);">Get Directions</p>
+                            </div>
+                        </div>
+                        <button id="map-nav-btn" class="btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem; border-radius: 12px; display: flex; align-items: center; gap: 6px;">
+                            GO
+                        </button>
+                    </div>
+                </div>
             </section>
 
             <!-- Solutions Screen -->

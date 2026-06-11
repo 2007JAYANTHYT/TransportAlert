@@ -227,6 +227,10 @@ const app = {
         // Update nav items
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         
+        // Hide map nav overlay
+        const mapNavOverlay = document.getElementById('map-nav-overlay');
+        if (mapNavOverlay) mapNavOverlay.classList.add('hidden');
+        
         // Hide bottom nav on login screen
         const bottomNav = document.querySelector('.bottom-nav');
         if (screenId === 'login-screen') {
@@ -476,6 +480,15 @@ const app = {
 
     navigateToIssue(lat, lng) {
         this.navigate('map-screen');
+        
+        // Show Google Maps navigation overlay
+        const mapNavOverlay = document.getElementById('map-nav-overlay');
+        const mapNavBtn = document.getElementById('map-nav-btn');
+        if (mapNavOverlay && mapNavBtn) {
+            mapNavOverlay.classList.remove('hidden');
+            mapNavBtn.onclick = () => window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, '_blank');
+        }
+
         setTimeout(() => {
             if (this.map) {
                 this.map.invalidateSize();
