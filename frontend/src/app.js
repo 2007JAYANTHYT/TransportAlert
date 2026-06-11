@@ -372,7 +372,7 @@ const app = {
                 // Sort by created_at descending
                 issues.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
                 
-                const activeIssues = issues.filter(i => i.status !== 'Cleared' && i.status !== 'Resolved');
+                const activeIssues = issues.filter(i => i.status !== 'Resolved');
                 document.getElementById('issue-count').innerText = activeIssues.length;
                 
                 const list = document.getElementById('issues-list');
@@ -395,11 +395,16 @@ const app = {
 
                     const verifiedIcon = upvotes >= 2 ? '🛡️ ' : '';
                     
+                    let isCleared = issue.status === 'Cleared';
+                    let cardOpacity = isCleared ? '0.6' : '1';
+                    let strikeThrough = isCleared ? 'text-decoration: line-through;' : '';
+                    let clearedBadge = isCleared ? '<span class="badge" style="background: rgba(255,255,255,0.1); color: #777;">CLEARED</span>' : `<span class="badge ${badgeClass}">${issue.severity}</span>`;
+                    
                     const html = `
-                        <div class="glass-card issue-item" onclick="app.showIssueDetail(${JSON.stringify(issue).replace(/"/g, '&quot;')})">
+                        <div class="glass-card issue-item" style="opacity: ${cardOpacity};" onclick="app.showIssueDetail(${JSON.stringify(issue).replace(/"/g, '&quot;')})">
                             <div class="issue-header">
-                                <strong>${verifiedIcon}${issue.title}</strong>
-                                <span class="badge ${badgeClass}">${issue.severity}</span>
+                                <strong style="${strikeThrough}">${verifiedIcon}${issue.title}</strong>
+                                ${clearedBadge}
                             </div>
                             <p class="sub-text">${issue.issue_type} • ${date}</p>
                         </div>
@@ -629,6 +634,8 @@ const app = {
         this.markers = [];
 
         this.issues.forEach(issue => {
+            if (issue.status === 'Cleared') return; // Do not show cleared issues on map
+
             if (issue.latitude && issue.longitude) {
                 const color = issue.severity === 'High' || issue.severity === 'Critical' ? 'red' : 'orange';
                 const markerHtml = `<div style="background-color: ${color}; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.5);"></div>`;
