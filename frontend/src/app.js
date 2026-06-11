@@ -249,12 +249,21 @@ const app = {
         if (screenId === 'home-screen') document.querySelectorAll('.nav-item')[0].classList.add('active');
         if (screenId === 'map-screen') {
             document.querySelectorAll('.nav-item')[1].classList.add('active');
-            this.initMap(); // Initialize map when visible
-            if (this.map) {
-                setTimeout(() => {
-                    this.map.invalidateSize();
-                }, 100);
+            // Show the map loader
+            const mapLoader = document.getElementById('map-loader');
+            if (mapLoader) {
+                mapLoader.classList.remove('fade-out');
+                mapLoader.style.display = 'flex';
             }
+            this.initMap();
+            setTimeout(() => {
+                if (this.map) this.map.invalidateSize();
+                // Fade out map loader after map renders
+                if (mapLoader) {
+                    mapLoader.classList.add('fade-out');
+                    setTimeout(() => { mapLoader.style.display = 'none'; }, 500);
+                }
+            }, 1500);
         }
         if (screenId === 'report-screen') {
             document.querySelectorAll('.nav-item')[2].classList.add('active');
@@ -514,7 +523,7 @@ const app = {
             attribution: '© OpenStreetMap contributors'
         }).addTo(this.map);
 
-        // Ask for permission and grab exact live location
+        // Ask for permission and grab live location
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
@@ -528,20 +537,21 @@ const app = {
                     // Center map on user
                     this.map.setView([lat, lng], 14);
                     
-                    // Add pulsing blue marker for user's live location
+                    // Add pulsing amber marker for user's live location
                     const userIcon = L.divIcon({
-                        html: '<div style="background-color: #3b82f6; width: 16px; height: 16px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 15px rgba(59,130,246,0.9); animation: pulse 1.5s infinite;"></div>',
+                        html: '<div style="background-color: #f59e0b; width: 16px; height: 16px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 15px rgba(245,158,11,0.9); animation: pulse 1.5s infinite;"></div>',
                         className: 'custom-marker'
                     });
                     
                     L.marker([lat, lng], {icon: userIcon})
                         .addTo(this.map)
-                        .bindPopup('<b>📍 You are here</b><br>Live Location');
+                        .bindPopup('<b>📍 You are here</b><br>Live Location')
+                        .openPopup();
                 },
                 (error) => {
-                    console.warn("Could not get live location instantly: ", error.message);
+                    console.warn("Could not get live location: ", error.message);
                 },
-                { enableHighAccuracy: false, timeout: 5000, maximumAge: Infinity } // Request cached/fast GPS location
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
             );
         }
 

@@ -17,51 +17,17 @@
     <!-- Loading Animation Screen -->
     <div id="loading-screen">
         <div class="loader-content">
-            <h1 class="loader-title">TransportAlert</h1>
-            <div class="animation-container">
-                <div class="sky"></div>
-                <div class="trees">
-                    <div class="tree-svg"><svg viewBox="0 0 24 24" fill="#059669"><path d="M12 2L8 8H10L6 14H8L4 20H11V24H13V20H20L16 14H18L14 8H16L12 2Z"/></svg></div>
-                    <div class="tree-svg" style="transform: scale(0.8);"><svg viewBox="0 0 24 24" fill="#10b981"><path d="M12 2L8 8H10L6 14H8L4 20H11V24H13V20H20L16 14H18L14 8H16L12 2Z"/></svg></div>
-                    <div class="tree-svg" style="transform: scale(1.1);"><svg viewBox="0 0 24 24" fill="#047857"><path d="M12 2L8 8H10L6 14H8L4 20H11V24H13V20H20L16 14H18L14 8H16L12 2Z"/></svg></div>
-                </div>
-                <div class="road">
-                    <div class="road-line"></div>
-                </div>
-                <div class="vehicle car-svg">
-                    <svg viewBox="0 0 64 32" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Car body -->
-                        <path d="M 10 16 L 16 6 L 38 6 L 46 16 L 58 16 C 60 16 62 18 62 20 L 62 26 L 56 26 C 56 23 54 21 51 21 C 48 21 46 23 46 26 L 18 26 C 18 23 16 21 13 21 C 10 21 8 23 8 26 L 2 26 C 1 26 0 25 0 24 L 0 18 C 0 16 2 16 4 16 Z" fill="#ef4444"/>
-                        <!-- Windows -->
-                        <path d="M 17 8 L 36 8 L 42 15 L 12 15 Z" fill="#93c5fd" opacity="0.8"/>
-                        <!-- Wheels -->
-                        <circle cx="13" cy="26" r="4" fill="#1e293b"/>
-                        <circle cx="51" cy="26" r="4" fill="#1e293b"/>
-                        <circle cx="13" cy="26" r="2" fill="#cbd5e1"/>
-                        <circle cx="51" cy="26" r="2" fill="#cbd5e1"/>
-                    </svg>
-                </div>
-                <div class="vehicle reverse truck-svg">
-                    <svg viewBox="0 0 64 32" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Truck cab -->
-                        <path d="M 0 10 L 14 10 L 18 16 L 18 26 L 12 26 C 12 23 10 21 7 21 C 4 21 2 23 2 26 L 0 26 Z" fill="#3b82f6"/>
-                        <!-- Truck body -->
-                        <rect x="20" y="4" width="44" height="22" rx="2" fill="#f8fafc"/>
-                        <rect x="20" y="4" width="44" height="22" rx="2" fill="none" stroke="#cbd5e1" stroke-width="1"/>
-                        <text x="30" y="18" font-family="sans-serif" font-size="8" font-weight="bold" fill="#94a3b8">DELIVERY</text>
-                        <!-- Windows -->
-                        <path d="M 2 12 L 12 12 L 15 16 L 2 16 Z" fill="#93c5fd" opacity="0.8"/>
-                        <!-- Wheels -->
-                        <circle cx="7" cy="26" r="4" fill="#1e293b"/>
-                        <circle cx="34" cy="26" r="4" fill="#1e293b"/>
-                        <circle cx="54" cy="26" r="4" fill="#1e293b"/>
-                        <circle cx="7" cy="26" r="2" fill="#cbd5e1"/>
-                        <circle cx="34" cy="26" r="2" fill="#cbd5e1"/>
-                        <circle cx="54" cy="26" r="2" fill="#cbd5e1"/>
-                    </svg>
-                </div>
+            <div class="loader-icon">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                </svg>
             </div>
-            <p>Loading your route...</p>
+            <h1 class="loader-title">TransportAlert</h1>
+            <p class="loader-sub">Finding your route...</p>
+            <div class="loader-bar">
+                <div class="loader-bar-fill"></div>
+            </div>
         </div>
     </div>
 
@@ -86,16 +52,22 @@
             <!-- Login Screen -->
             <section id="login-screen" class="screen">
                 <div class="login-container">
-                    <div class="glass-card text-center login-card" style="padding: 2rem;">
-                        <h2 style="margin-bottom: 1rem; color: var(--text-main);">Welcome Back</h2>
-                        <p class="sub-text" style="margin-bottom: 2rem;">Verify your mobile number to continue securely reporting issues.</p>
+                    <div class="glass-card text-center login-card" style="padding: 2.5rem 2rem;">
+                        <!-- Shield Icon -->
+                        <div class="login-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                        </div>
+                        <h2 style="margin-bottom: 0.4rem; color: var(--text-main); font-size: 1.6rem;">Welcome Back</h2>
+                        <p class="sub-text" style="margin-bottom: 2rem; font-size: 0.85rem;">Verify your identity to report issues securely.</p>
                         
                         <div id="phone-input-step">
                             <div class="input-group text-left">
                                 <label>Mobile Number</label>
                                 <div style="display: flex; gap: 10px;">
-                                    <input type="text" value="+91" readonly style="width: 70px; font-size: 1.2rem; background: rgba(245,158,11,0.04); text-align: center; padding: 0.9rem 0; font-weight: bold; border-radius: 10px; border: 1px solid rgba(245,158,11,0.12); color: var(--primary-color);">
-                                    <input type="tel" id="phone-number" placeholder="98765 43210" style="font-size: 1.2rem; letter-spacing: 2px; flex: 1; background: rgba(245,158,11,0.03); border: 1px solid rgba(245,158,11,0.12); border-radius: 10px;" maxlength="12">
+                                    <input type="text" value="+91" readonly style="width: 70px; font-size: 1.2rem; background: rgba(217,119,6,0.04); text-align: center; padding: 0.9rem 0; font-weight: bold; border-radius: 10px; border: 1px solid rgba(217,119,6,0.15); color: #d97706;">
+                                    <input type="tel" id="phone-number" placeholder="98765 43210" style="font-size: 1.2rem; letter-spacing: 2px; flex: 1; border-radius: 10px;" maxlength="12">
                                 </div>
                             </div>
                             <button id="send-otp-btn" class="btn-primary w-100" onclick="app.sendOTP()">Send OTP</button>
@@ -103,7 +75,13 @@
                         </div>
 
                         <div id="otp-input-step" class="hidden">
-                            <p class="sub-text" style="margin-bottom: 1rem;">Enter the 6-digit code sent to your phone</p>
+                            <div class="otp-step-header">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                </svg>
+                                <p class="sub-text" style="margin: 0;">Enter the 6-digit code sent to your phone</p>
+                            </div>
                             <div class="otp-container">
                                 <input type="number" class="otp-box" maxlength="1" oninput="app.otpInput(this, 1)" onkeydown="app.otpBackspace(event, this, null)">
                                 <input type="number" class="otp-box" maxlength="1" oninput="app.otpInput(this, 2)" onkeydown="app.otpBackspace(event, this, 1)">
@@ -182,6 +160,18 @@
 
             <!-- Map Screen -->
             <section id="map-screen" class="screen map-full">
+                <!-- Map Loading Overlay -->
+                <div id="map-loader" class="map-loader">
+                    <div class="map-loader-content">
+                        <div class="map-pin-bounce">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="#d97706" stroke="none">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3" fill="#050505"></circle>
+                            </svg>
+                        </div>
+                        <p style="color: var(--text-sub); font-size: 0.85rem; margin-top: 0.5rem;">Loading Map...</p>
+                    </div>
+                </div>
                 <div id="map"></div>
             </section>
 
