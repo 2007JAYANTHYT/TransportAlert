@@ -17,17 +17,44 @@
     <!-- Loading Animation Screen -->
     <div id="loading-screen">
         <div class="loader-content">
-            <div class="loader-icon">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                </svg>
-            </div>
             <h1 class="loader-title">TransportAlert</h1>
-            <p class="loader-sub">Finding your route...</p>
-            <div class="loader-bar">
-                <div class="loader-bar-fill"></div>
+            <div class="animation-container">
+                <div class="sky"></div>
+                <div class="trees">
+                    <div class="tree-svg"><svg viewBox="0 0 24 24" fill="#059669"><path d="M12 2L8 8H10L6 14H8L4 20H11V24H13V20H20L16 14H18L14 8H16L12 2Z"/></svg></div>
+                    <div class="tree-svg" style="transform: scale(0.8);"><svg viewBox="0 0 24 24" fill="#10b981"><path d="M12 2L8 8H10L6 14H8L4 20H11V24H13V20H20L16 14H18L14 8H16L12 2Z"/></svg></div>
+                    <div class="tree-svg" style="transform: scale(1.1);"><svg viewBox="0 0 24 24" fill="#047857"><path d="M12 2L8 8H10L6 14H8L4 20H11V24H13V20H20L16 14H18L14 8H16L12 2Z"/></svg></div>
+                </div>
+                <div class="road">
+                    <div class="road-line"></div>
+                </div>
+                <div class="vehicle car-svg">
+                    <svg viewBox="0 0 64 32" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 10 16 L 16 6 L 38 6 L 46 16 L 58 16 C 60 16 62 18 62 20 L 62 26 L 56 26 C 56 23 54 21 51 21 C 48 21 46 23 46 26 L 18 26 C 18 23 16 21 13 21 C 10 21 8 23 8 26 L 2 26 C 1 26 0 25 0 24 L 0 18 C 0 16 2 16 4 16 Z" fill="#d97706"/>
+                        <path d="M 17 8 L 36 8 L 42 15 L 12 15 Z" fill="#fbbf24" opacity="0.6"/>
+                        <circle cx="13" cy="26" r="4" fill="#1e1e1e"/>
+                        <circle cx="51" cy="26" r="4" fill="#1e1e1e"/>
+                        <circle cx="13" cy="26" r="2" fill="#555"/>
+                        <circle cx="51" cy="26" r="2" fill="#555"/>
+                    </svg>
+                </div>
+                <div class="vehicle reverse truck-svg">
+                    <svg viewBox="0 0 64 32" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 0 10 L 14 10 L 18 16 L 18 26 L 12 26 C 12 23 10 21 7 21 C 4 21 2 23 2 26 L 0 26 Z" fill="#b45309"/>
+                        <rect x="20" y="4" width="44" height="22" rx="2" fill="#1a1a1a"/>
+                        <rect x="20" y="4" width="44" height="22" rx="2" fill="none" stroke="rgba(217,119,6,0.2)" stroke-width="1"/>
+                        <text x="30" y="18" font-family="sans-serif" font-size="8" font-weight="bold" fill="#777">DELIVERY</text>
+                        <path d="M 2 12 L 12 12 L 15 16 L 2 16 Z" fill="#fbbf24" opacity="0.5"/>
+                        <circle cx="7" cy="26" r="4" fill="#1e1e1e"/>
+                        <circle cx="34" cy="26" r="4" fill="#1e1e1e"/>
+                        <circle cx="54" cy="26" r="4" fill="#1e1e1e"/>
+                        <circle cx="7" cy="26" r="2" fill="#555"/>
+                        <circle cx="34" cy="26" r="2" fill="#555"/>
+                        <circle cx="54" cy="26" r="2" fill="#555"/>
+                    </svg>
+                </div>
             </div>
+            <p style="color: var(--text-sub); font-size: 0.85rem;">Loading your route...</p>
         </div>
     </div>
 
