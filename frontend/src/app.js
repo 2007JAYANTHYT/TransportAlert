@@ -102,8 +102,10 @@ const app = {
             return;
         }
         
-        // Auto-append +91 country code safely
-        const fullPhoneNumber = "+91" + phoneNumber;
+        // Read custom country code, default to +91
+        let cCode = document.getElementById('country-code').value.trim();
+        if (!cCode.startsWith('+')) cCode = '+' + cCode;
+        const fullPhoneNumber = cCode + phoneNumber;
         
         const appVerifier = window.recaptchaVerifier;
         const btn = document.getElementById('send-otp-btn');
@@ -454,7 +456,6 @@ const app = {
             <div class="mt-2 mb-2" style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
                 ${issue.description || 'No detailed description provided.'}
             </div>
-            
             <!-- Location Section -->
             <div class="mt-2 mb-2" style="background: rgba(217,119,6,0.04); padding: 1rem; border-radius: 12px; border: 1px solid var(--border-color);">
                 <p style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-color); font-weight: 600; margin-bottom: 0.5rem;">Location</p>
