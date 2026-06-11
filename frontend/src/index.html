@@ -21,15 +21,45 @@
             <div class="animation-container">
                 <div class="sky"></div>
                 <div class="trees">
-                    <div class="tree"></div>
-                    <div class="tree"></div>
-                    <div class="tree"></div>
+                    <div class="tree-svg"><svg viewBox="0 0 24 24" fill="#059669"><path d="M12 2L8 8H10L6 14H8L4 20H11V24H13V20H20L16 14H18L14 8H16L12 2Z"/></svg></div>
+                    <div class="tree-svg" style="transform: scale(0.8);"><svg viewBox="0 0 24 24" fill="#10b981"><path d="M12 2L8 8H10L6 14H8L4 20H11V24H13V20H20L16 14H18L14 8H16L12 2Z"/></svg></div>
+                    <div class="tree-svg" style="transform: scale(1.1);"><svg viewBox="0 0 24 24" fill="#047857"><path d="M12 2L8 8H10L6 14H8L4 20H11V24H13V20H20L16 14H18L14 8H16L12 2Z"/></svg></div>
                 </div>
                 <div class="road">
                     <div class="road-line"></div>
                 </div>
-                <div class="vehicle"></div>
-                <div class="vehicle reverse"></div>
+                <div class="vehicle car-svg">
+                    <svg viewBox="0 0 64 32" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Car body -->
+                        <path d="M 10 16 L 16 6 L 38 6 L 46 16 L 58 16 C 60 16 62 18 62 20 L 62 26 L 56 26 C 56 23 54 21 51 21 C 48 21 46 23 46 26 L 18 26 C 18 23 16 21 13 21 C 10 21 8 23 8 26 L 2 26 C 1 26 0 25 0 24 L 0 18 C 0 16 2 16 4 16 Z" fill="#ef4444"/>
+                        <!-- Windows -->
+                        <path d="M 17 8 L 36 8 L 42 15 L 12 15 Z" fill="#93c5fd" opacity="0.8"/>
+                        <!-- Wheels -->
+                        <circle cx="13" cy="26" r="4" fill="#1e293b"/>
+                        <circle cx="51" cy="26" r="4" fill="#1e293b"/>
+                        <circle cx="13" cy="26" r="2" fill="#cbd5e1"/>
+                        <circle cx="51" cy="26" r="2" fill="#cbd5e1"/>
+                    </svg>
+                </div>
+                <div class="vehicle reverse truck-svg">
+                    <svg viewBox="0 0 64 32" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Truck cab -->
+                        <path d="M 0 10 L 14 10 L 18 16 L 18 26 L 12 26 C 12 23 10 21 7 21 C 4 21 2 23 2 26 L 0 26 Z" fill="#3b82f6"/>
+                        <!-- Truck body -->
+                        <rect x="20" y="4" width="44" height="22" rx="2" fill="#f8fafc"/>
+                        <rect x="20" y="4" width="44" height="22" rx="2" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+                        <text x="30" y="18" font-family="sans-serif" font-size="8" font-weight="bold" fill="#94a3b8">DELIVERY</text>
+                        <!-- Windows -->
+                        <path d="M 2 12 L 12 12 L 15 16 L 2 16 Z" fill="#93c5fd" opacity="0.8"/>
+                        <!-- Wheels -->
+                        <circle cx="7" cy="26" r="4" fill="#1e293b"/>
+                        <circle cx="34" cy="26" r="4" fill="#1e293b"/>
+                        <circle cx="54" cy="26" r="4" fill="#1e293b"/>
+                        <circle cx="7" cy="26" r="2" fill="#cbd5e1"/>
+                        <circle cx="34" cy="26" r="2" fill="#cbd5e1"/>
+                        <circle cx="54" cy="26" r="2" fill="#cbd5e1"/>
+                    </svg>
+                </div>
             </div>
             <p>Loading your route...</p>
         </div>
@@ -37,6 +67,9 @@
 
     <!-- Main App Container -->
     <div id="app" class="hidden">
+        
+        <!-- Custom Error Toast -->
+        <div id="error-toast" class="toast hidden"></div>
         
         <!-- Navbar -->
         <nav class="navbar">
@@ -46,8 +79,44 @@
         <!-- Screens -->
         <main class="content">
             
+            <!-- Login Screen -->
+            <section id="login-screen" class="screen">
+                <div class="login-container">
+                    <div class="glass-card text-center login-card" style="padding: 2rem;">
+                        <h2 style="margin-bottom: 1rem; color: var(--text-main);">Welcome Back</h2>
+                        <p class="sub-text" style="margin-bottom: 2rem;">Verify your mobile number to continue securely reporting issues.</p>
+                        
+                        <div id="phone-input-step">
+                            <div class="input-group text-left">
+                                <label>Mobile Number</label>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="text" value="+91" readonly style="width: 70px; font-size: 1.2rem; text-align: center; padding: 0.9rem 0; font-weight: bold; border-radius: 12px; color: var(--text-main);">
+                                    <input type="tel" id="phone-number" placeholder="98765 43210" style="font-size: 1.2rem; letter-spacing: 2px; flex: 1;" maxlength="12">
+                                </div>
+                            </div>
+                            <button id="send-otp-btn" class="btn-primary w-100" onclick="app.sendOTP()">Send OTP</button>
+                            <div id="recaptcha-container" style="margin-top: 1rem;"></div>
+                        </div>
+
+                        <div id="otp-input-step" class="hidden">
+                            <p class="sub-text" style="margin-bottom: 1rem;">Enter the 6-digit code sent to your phone</p>
+                            <div class="otp-container">
+                                <input type="number" class="otp-box" maxlength="1" oninput="app.otpInput(this, 1)" onkeydown="app.otpBackspace(event, this, null)">
+                                <input type="number" class="otp-box" maxlength="1" oninput="app.otpInput(this, 2)" onkeydown="app.otpBackspace(event, this, 1)">
+                                <input type="number" class="otp-box" maxlength="1" oninput="app.otpInput(this, 3)" onkeydown="app.otpBackspace(event, this, 2)">
+                                <input type="number" class="otp-box" maxlength="1" oninput="app.otpInput(this, 4)" onkeydown="app.otpBackspace(event, this, 3)">
+                                <input type="number" class="otp-box" maxlength="1" oninput="app.otpInput(this, 5)" onkeydown="app.otpBackspace(event, this, 4)">
+                                <input type="number" class="otp-box" maxlength="1" oninput="app.otpInput(this, null)" onkeydown="app.otpBackspace(event, this, 5)">
+                            </div>
+                            <button id="verify-otp-btn" class="btn-primary w-100 mt-2" onclick="app.verifyOTP()">Verify</button>
+                            <button class="btn-secondary w-100 mt-1" onclick="app.resetLogin()">Change Number</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Home Screen -->
-            <section id="home-screen" class="screen active">
+            <section id="home-screen" class="screen">
                 <div class="screen-header">
                     <h3>Active Issues</h3>
                     <button class="btn-primary" onclick="app.navigate('report-screen')">+ Report Issue</button>
@@ -94,27 +163,31 @@
                             <option>Critical</option>
                         </select>
                     </div>
-                    <button type="button" class="btn-secondary" onclick="app.getLocation()">📍 Share Location</button>
-                    <p id="r-location-text" class="sub-text">Location not added</p>
+                    <div class="input-group">
+                        <label>Location</label>
+                        <button type="button" class="btn-secondary" onclick="app.getLocation()" style="margin-bottom: 0.5rem;">📍 Fetch My Location</button>
+                        <p id="r-location-text" class="sub-text">Or drag the marker on the map below to set your exact location.</p>
+                        <div id="report-map-container" style="height: 180px; width: 100%; border-radius: 12px; margin-top: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
+                            <div id="report-map" style="height: 100%; width: 100%;"></div>
+                        </div>
+                    </div>
                     <input type="hidden" id="r-lat"><input type="hidden" id="r-lng">
                     <button type="submit" class="btn-primary w-100 mt-2">Submit Report</button>
                 </form>
             </section>
 
             <!-- Map Screen -->
-            <section id="map-screen" class="screen">
-                <div class="screen-header">
-                    <h3>Live Map Tracker</h3>
-                </div>
-                <div id="map-container" class="glass-card">
-                    <div id="map"></div>
-                </div>
+            <section id="map-screen" class="screen map-full">
+                <div id="map"></div>
             </section>
 
             <!-- Solutions Screen -->
             <section id="solutions-screen" class="screen">
-                <div class="screen-header">
-                    <h3>Solutions & Contacts</h3>
+                <div class="screen-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3>Info & Settings</h3>
+                    <button class="btn-secondary" onclick="app.logout()" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; border: 1px solid rgba(239,68,68,0.5); color: var(--danger);">
+                        Log Out
+                    </button>
                 </div>
                 <div class="glass-card mb-2">
                     <h4>Emergency Contacts</h4>
@@ -153,16 +226,34 @@
 
         <!-- Bottom Navigation -->
         <nav class="bottom-nav">
-            <button class="nav-item active" onclick="app.navigate('home-screen')">🏠<br>Home</button>
-            <button class="nav-item" onclick="app.navigate('map-screen')">🗺️<br>Map</button>
-            <button class="nav-item" onclick="app.navigate('report-screen')">➕<br>Report</button>
-            <button class="nav-item" onclick="app.navigate('solutions-screen')">💡<br>Solutions</button>
+            <button class="nav-item active" onclick="app.navigate('home-screen')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <span>Home</span>
+            </button>
+            <button class="nav-item" onclick="app.navigate('map-screen')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+                <span>Map</span>
+            </button>
+            <button class="nav-item" onclick="app.navigate('report-screen')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                <span>Report</span>
+            </button>
+            <button class="nav-item" onclick="app.navigate('solutions-screen')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                <span>Info</span>
+            </button>
         </nav>
 
     </div>
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    
     <!-- App JS -->
     <script src="app.js"></script>
 </body>

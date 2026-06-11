@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "421232422221",
+    "project_id": "transportalert-91d28",
+    "storage_bucket": "transportalert-91d28.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:421232422221:android:8f83dc1cbd924b4366db04",
+        "android_client_info": {
+          "package_name": "transport.alert"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4zVRhNid7LJmDYJCEcAH8xfmD55k1SrI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
