@@ -350,16 +350,29 @@ const app = {
             issuesRef.on('value', (snapshot) => {
                 const data = snapshot.val();
                 const issues = [];
+                const ONE_DAY = 24 * 60 * 60 * 1000;
+                const now = Date.now();
+                
                 if (data) {
                     for (let key in data) {
-                        issues.push({ id: key, ...data[key] });
+                        let issueData = data[key];
+                        
+                        // Garbage Collection: Delete issues marked as 'Cleared' older than 24 hours
+                        if (issueData.status === 'Cleared' && issueData.cleared_at) {
+                            if (now - issueData.cleared_at > ONE_DAY) {
+                                db.ref('issues/' + key).remove();
+                                continue; // Skip adding to array
+                            }
+                        }
+                        
+                        issues.push({ id: key, ...issueData });
                     }
                 }
                 
                 // Sort by created_at descending
                 issues.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
                 
-                const activeIssues = issues.filter(i => i.status !== 'Resolved');
+                const activeIssues = issues.filter(i => i.status !== 'Cleared' && i.status !== 'Resolved');
                 document.getElementById('issue-count').innerText = activeIssues.length;
                 
                 const list = document.getElementById('issues-list');
@@ -508,8 +521,12 @@ const app = {
                 if (type === 'downvote') newDownvotes++;
                 
                 // Auto-resolve logic (Waze-style)
-                if (newDownvotes >= 3) {
-                    await issueRef.update({ status: 'Resolved' });
+                // Set to 1 vote per user request, and track when it was cleared for the 24h timer
+                if (newDownvotes >= 1) {
+                    await issueRef.update({ 
+                        status: 'Cleared',
+                        cleared_at: Date.now()
+                    });
                     this.showError("Issue marked as Cleared by the community!");
                     this.navigate('home-screen');
                 } else {
