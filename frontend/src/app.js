@@ -419,6 +419,11 @@ const app = {
         const downvotes = issue.computedDownvotes || 0;
         const isVerified = upvotes >= 2;
         
+        const hasLocation = issue.latitude && issue.longitude;
+        const locationText = hasLocation 
+            ? `📍 ${parseFloat(issue.latitude).toFixed(5)}, ${parseFloat(issue.longitude).toFixed(5)}`
+            : '📍 Location not available';
+        
         detailContent.innerHTML = `
             <h2>${issue.title} ${isVerified ? '<span style="color:var(--success); font-size:1rem;" title="Verified by Community">🛡️ Verified</span>' : ''}</h2>
             <p class="sub-text mb-2">${issue.issue_type} • Reported: ${date}</p>
@@ -428,11 +433,50 @@ const app = {
                 ${issue.description || 'No detailed description provided.'}
             </div>
             
+            <!-- Location Section -->
+            <div class="mt-2 mb-2" style="background: rgba(217,119,6,0.04); padding: 1rem; border-radius: 12px; border: 1px solid var(--border-color);">
+                <p style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-color); font-weight: 600; margin-bottom: 0.5rem;">Location</p>
+                <p style="color: var(--text-sub); font-size: 0.9rem;">${locationText}</p>
+                ${hasLocation ? `
+                    <div style="display:flex; gap:10px; margin-top: 10px;">
+                        <button class="btn-primary" style="flex:1; font-size: 0.85rem; padding: 0.6rem;" onclick="app.navigateToIssue(${issue.latitude}, ${issue.longitude})">
+                            🗺️ View on Map
+                        </button>
+                        <button class="btn-secondary" style="flex:1; font-size: 0.85rem; padding: 0.6rem;" onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${issue.latitude},${issue.longitude}', '_blank')">
+                            🧭 Navigate
+                        </button>
+                    </div>
+                ` : ''}
+            </div>
+            
             <div style="display:flex; gap:10px; margin-top: 15px;">
-                <button class="btn-secondary" style="flex:1; border: 1px solid rgba(59,130,246,0.3);" onclick="app.voteIssue('${issue.id}', 'upvote')">👍 Still There (${upvotes})</button>
+                <button class="btn-secondary" style="flex:1; border: 1px solid rgba(217,119,6,0.2);" onclick="app.voteIssue('${issue.id}', 'upvote')">👍 Still There (${upvotes})</button>
                 <button class="btn-secondary" style="flex:1; border: 1px solid rgba(239,68,68,0.3);" onclick="app.voteIssue('${issue.id}', 'downvote')">👎 Cleared (${downvotes})</button>
             </div>
         `;
+    },
+
+    navigateToIssue(lat, lng) {
+        this.navigate('map-screen');
+        setTimeout(() => {
+            if (this.map) {
+                this.map.invalidateSize();
+                this.map.flyTo([lat, lng], 16, { duration: 1.5 });
+                
+                // Add a temporary highlight marker
+                const highlightIcon = L.divIcon({
+                    html: '<div style="background-color: #ef4444; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 20px rgba(239,68,68,0.8); animation: pulse 1s infinite;"></div>',
+                    className: 'custom-marker'
+                });
+                const tempMarker = L.marker([lat, lng], {icon: highlightIcon})
+                    .addTo(this.map)
+                    .bindPopup('<b>⚠️ Reported Issue</b>')
+                    .openPopup();
+                
+                // Remove highlight after 8 seconds
+                setTimeout(() => { this.map.removeLayer(tempMarker); }, 8000);
+            }
+        }, 500);
     },
 
     async voteIssue(id, type) {
